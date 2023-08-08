@@ -1,0 +1,77 @@
+#package for matrix 
+import numpy as np
+
+grid = [[0 for x in range(9)] for y in range(9)]
+
+values = input("Enter all values separated by spaces: ")
+values = [int(x) for x in values.split()]
+index = 0
+for row in range(9):
+    for col in range(9):
+        grid[row][col] = values[index]
+        index += 1
+
+def possible(row, column, number):
+    global grid
+
+    #Is the number appearing in the given row?
+    for i in range(0,9):
+        if grid[row][i] == number:
+            return False
+        
+    #Is the number appearing in the given column?
+    for i in range(0,9):
+        if grid[i][column] == number:
+            return False
+        
+    #Is the number appearing in the given square?
+    x0 = (column // 3) * 3   #// round up 
+    y0 = (row // 3) * 3
+    for i in range(0,3):
+        for j in range(0,3):
+            if grid[y0+i][x0+j] == number:
+                return False
+            
+    return True
+def display():
+    global grid
+    print("PROBLEM")
+    for row in range(0,9):
+        if ((row) % 3 == 0): 
+            print("---------------------") 
+        for column in range(0,9):
+            if ((column+1) % 3 == 0):
+                print(grid[row][column], end = " |")
+            else:
+                print(grid[row][column], end = " ")
+        print("\n")
+    print("---------------------")
+    
+def solve():
+    global grid
+    for row in range(0,9):
+        for column in range(0,9):
+            if grid[row][column] == 0:    #blank space in sudoku
+                for number in range(1,10): #1-10 sudoku have numbers from 1 to 9
+                    if possible(row, column, number):
+                        grid[row][column] = number
+                        solve()
+                        grid[row][column] = 0      
+                return
+
+    print("\n\nSOLUTION")
+    for row in range(0,9):
+        if ((row) % 3 == 0): 
+            print("---------------------") 
+        for column in range(0,9):
+            if ((column+1) % 3 == 0):
+                print(grid[row][column], end = " |")
+            else:
+                print(grid[row][column], end = " ")
+        print("\n")
+    print("---------------------")
+    input('More possible solutions')
+
+display()
+solve()
+
